@@ -1,3 +1,9 @@
 .blog-image img {
   height: 15rem !important;
 }
+
+.blog-view-image {
+  width: 100% !important;
+  object-fit: cover;
+  height: 40rem !important;
+}

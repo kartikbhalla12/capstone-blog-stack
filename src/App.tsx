@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Route, Router, Switch, NavLink } from 'react-router-dom'
+import { Route, Router, Switch, NavLink, Redirect } from 'react-router-dom'
 import { Menu, Segment } from 'semantic-ui-react'
 
 import Auth from './auth/Auth'
@@ -10,6 +10,7 @@ import MyBlogs from './components/MyBlogs'
 import EditBlog from './components/editBlog'
 import NewBlog from './components/newBlog'
 import './App.css'
+import BlogView from './components/BlogView'
 
 export interface AppProps {}
 
@@ -65,7 +66,11 @@ export default class App extends Component<AppProps, AppState> {
           )}
           {this.props.auth.isAuthenticated() && (
             <Menu.Menu position="right">
-              <NavLink to="/new" activeClassName="active" className="item">
+              <NavLink
+                to="/blogs/new"
+                activeClassName="active"
+                className="item"
+              >
                 NEW BLOG
               </NavLink>
               <NavLink to="/my-blogs" activeClassName="active" className="item">
@@ -103,21 +108,7 @@ export default class App extends Component<AppProps, AppState> {
     return (
       <Switch>
         <Route
-          path="/"
-          exact
-          render={(props) => {
-            return <Blogs {...props} auth={this.props.auth} />
-          }}
-        />
-        <Route
-          path="/my-blogs"
-          exact
-          render={(props) => {
-            return <MyBlogs {...props} auth={this.props.auth} />
-          }}
-        />
-        <Route
-          path="/new"
+          path="/blogs/new"
           exact
           render={(props) => {
             return <NewBlog {...props} auth={this.props.auth} />
@@ -128,6 +119,29 @@ export default class App extends Component<AppProps, AppState> {
           exact
           render={(props) => {
             return <EditBlog {...props} auth={this.props.auth} />
+          }}
+        />
+        <Route
+          path="/my-blogs"
+          exact
+          render={(props) => {
+            return <MyBlogs {...props} auth={this.props.auth} />
+          }}
+        />
+
+        <Route
+          path="/blogs/:blogId"
+          exact
+          render={(props) => {
+            return <BlogView {...props} auth={this.props.auth} />
+          }}
+        />
+        <Redirect path="/blogs" to="/" />
+        <Route
+          path="/"
+          exact
+          render={(props) => {
+            return <Blogs {...props} auth={this.props.auth} />
           }}
         />
         <Route component={NotFound} />

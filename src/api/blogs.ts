@@ -1,6 +1,6 @@
 import Axios from 'axios'
 import { apiEndpoint } from '../config'
-import { BlogListView } from './../types/Blog'
+import { Blog, BlogListView } from './../types/Blog'
 import { BlogRequest } from './../types/BlogRequest'
 
 export async function getBlogs(idToken: string): Promise<BlogListView[]> {
@@ -27,6 +27,19 @@ export async function getMyBlogs(idToken: string): Promise<BlogListView[]> {
   })
   console.log('My Blogs:', response.data)
   return response.data.items
+}
+
+export async function getBlog(idToken: string, blogId: string): Promise<Blog> {
+  console.log('Fetching blog with id: ', blogId)
+
+  const response = await Axios.get(`${apiEndpoint}/blogs/${blogId}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${idToken}`
+    }
+  })
+  console.log('Blog:', response.data)
+  return response.data.item
 }
 
 export async function deleteMyBlog(

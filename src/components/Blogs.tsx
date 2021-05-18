@@ -35,9 +35,6 @@ class Blogs extends React.Component<BlogsProps, BlogsState> {
     return (
       <Container>
         <Header as="h1">Blogs</Header>
-
-        {/* {this.renderCreateTodoInput()} */}
-
         {this.renderBlogs()}
       </Container>
     )
