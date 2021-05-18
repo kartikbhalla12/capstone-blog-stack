@@ -9,6 +9,7 @@ import Blogs from './components/Blogs'
 import MyBlogs from './components/MyBlogs'
 import EditBlog from './components/editBlog'
 import NewBlog from './components/newBlog'
+import './App.css'
 
 export interface AppProps {}
 

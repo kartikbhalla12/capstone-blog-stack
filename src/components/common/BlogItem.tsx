@@ -16,7 +16,12 @@ const BlogItem: React.FC<BlogItemProps> = ({ blog, deleteBlog, myBlog }) => {
       onClick={() => history.push('/blogs/123')}
       style={{ cursor: 'pointer' }}
     >
-      <Item.Image size="small" src={blog.imageUrl} rounded />
+      <Item.Image
+        size="small"
+        src={blog.imageUrl}
+        rounded
+        className="blog-image"
+      />
       <Item.Content verticalAlign="middle">
         <Item.Header
           as="a"

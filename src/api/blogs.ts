@@ -1,6 +1,7 @@
 import Axios from 'axios'
 import { apiEndpoint } from '../config'
 import { BlogListView } from './../types/Blog'
+import { BlogRequest } from './../types/BlogRequest'
 
 export async function getBlogs(idToken: string): Promise<BlogListView[]> {
   console.log('Fetching blogs')
@@ -41,5 +42,27 @@ export async function deleteMyBlog(
     }
   })
   console.log('Deleted Blog:', response.data)
+  return response.data.items
+}
+
+export async function createBlog(
+  idToken: string,
+  blog: BlogRequest,
+  image: File
+): Promise<BlogListView[]> {
+  console.log('Creating a new blog!', blog)
+
+  const response = await Axios.post(`${apiEndpoint}/blogs`, blog, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${idToken}`
+    }
+  })
+  console.log('Created Blog: ', response.data)
+
+  const imageUploadUrl: string = response.data.item.blogImageUploadUrl
+
+  await Axios.put(imageUploadUrl, image)
+
   return response.data.items
 }

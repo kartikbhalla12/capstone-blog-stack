@@ -4,6 +4,7 @@ import { Container, Form, Button, Header, Message } from 'semantic-ui-react'
 import { Editor } from 'react-draft-wysiwyg'
 import { ContentState, RawDraftContentState } from 'draft-js'
 import draftToHtml from 'draftjs-to-html'
+import { createBlog } from '../api/blogs'
 
 export interface NewBlogProps {
   auth: Auth
@@ -51,7 +52,7 @@ class NewBlog extends React.Component<NewBlogProps, NewBlogState> {
     // console.log(draftToHtml(contentState))
   }
 
-  handleSubmit = () => {
+  handleSubmit = async () => {
     const {
       authorName,
       description,
@@ -72,15 +73,35 @@ class NewBlog extends React.Component<NewBlogProps, NewBlogState> {
       this.setState({ ...this.state, error: 'All fields are required' })
     } else {
       console.log(this.state)
-      console.log(draftToHtml(this.state.contentState!))
-      this.setState({
-        heading: '',
-        description: '',
-        authorName: '',
-        timeToRead: '',
-        error: '',
-        success: 'Created blog successfully!'
-      })
+      console.log(contentState && draftToHtml(contentState))
+
+      try {
+        await createBlog(
+          this.props.auth.getIdToken(),
+          {
+            authorName,
+            description,
+            heading,
+            timeToRead,
+            content: draftToHtml(contentState)
+          },
+          imageFile
+        )
+        this.setState({
+          heading: '',
+          description: '',
+          authorName: '',
+          timeToRead: '',
+          error: '',
+          success: 'Created blog successfully!',
+          contentState: undefined
+        })
+      } catch (ex) {
+        this.setState({
+          error: 'Network Error!',
+          success: ''
+        })
+      }
     }
   }
 
@@ -127,11 +148,20 @@ class NewBlog extends React.Component<NewBlogProps, NewBlogState> {
               onChange={this.handleInputChange}
             />
           </Form.Field>
-          <Form.Field required>
-            <label>Upload Image</label>
-            <Button as="label" htmlFor="file" type="button">
-              Some button stuff
-            </Button>
+          <Form.Field>
+            <label>Image</label>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <Button
+                as="label"
+                style={{ width: 'fit-content' }}
+                htmlFor="file"
+                type="button"
+              >
+                Upload Image
+              </Button>
+              <p>{this.state.imageFile?.name}</p>
+            </div>
+
             <input
               type="file"
               id="file"
