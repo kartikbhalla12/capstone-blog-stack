@@ -8,7 +8,7 @@ import { NotFound } from './components/NotFound'
 import Blogs from './components/Blogs'
 import MyBlogs from './components/MyBlogs'
 import EditBlog from './components/EditBlog'
-import NewBlog from './components/newBlog'
+import NewBlog from './components/NewBlog'
 import './App.css'
 import BlogView from './components/BlogView'
 

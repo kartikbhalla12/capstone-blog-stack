@@ -1,3 +1,5 @@
+import { RawDraftContentState } from 'draft-js'
+
 export interface BlogListView {
   blogId: string
   authorName: string
@@ -16,6 +18,6 @@ export interface Blog {
   createdAt: string
   updatedAt: string
   imageUrl: string
-  content: string
+  content: RawDraftContentState
   timeToRead: string
 }

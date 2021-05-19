@@ -13,6 +13,7 @@ import {
   Image
 } from 'semantic-ui-react'
 import ReactHtmlParser from 'react-html-parser'
+import draftToHtml from 'draftjs-to-html'
 
 export interface BlogViewProps extends RouteComponentProps<{ blogId: string }> {
   auth: Auth
@@ -125,7 +126,7 @@ class BlogView extends React.Component<BlogViewProps, BlogViewState> {
           }}
         />
 
-        <>{ReactHtmlParser(blog!.content)}</>
+        <>{ReactHtmlParser(draftToHtml(blog!.content))}</>
       </Container>
     )
   }

@@ -1,7 +1,12 @@
 import * as React from 'react'
 import { Editor } from 'react-draft-wysiwyg'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
-import { ContentState, convertToRaw, EditorState } from 'draft-js'
+import {
+  ContentState,
+  convertFromRaw,
+  convertToRaw,
+  EditorState
+} from 'draft-js'
 import {
   Container,
   Form,
@@ -11,11 +16,9 @@ import {
   Grid,
   Loader
 } from 'semantic-ui-react'
-import htmlToDraft from 'html-to-draftjs'
 import Auth from '../auth/Auth'
 import { RouteComponentProps } from 'react-router-dom'
 import { getMyBlog, updateBlog } from '../api/blogs'
-import draftToHtml from 'draftjs-to-html'
 
 export interface EditBlogProps extends RouteComponentProps<{ blogId: string }> {
   auth: Auth
@@ -53,12 +56,7 @@ class EditBlog extends React.Component<EditBlogProps, EditBlogState> {
     try {
       const blog = await getMyBlog(this.props.auth.getIdToken(), params.blogId)
 
-      const blocksFromHtml = htmlToDraft(blog.content)
-      const { contentBlocks, entityMap } = blocksFromHtml
-      const contentState = ContentState.createFromBlockArray(
-        contentBlocks,
-        entityMap
-      )
+      const contentState = convertFromRaw(blog.content)
       const editorState = EditorState.createWithContent(contentState)
 
       this.setState({
@@ -113,12 +111,6 @@ class EditBlog extends React.Component<EditBlogProps, EditBlogState> {
     ) {
       this.setState({ ...this.state, error: 'All fields are required' })
     } else {
-      console.log(this.state)
-      console.log(
-        editorState &&
-          draftToHtml(convertToRaw(editorState.getCurrentContent()))
-      )
-
       try {
         this.setState({
           loadingBlog: true,
@@ -132,7 +124,7 @@ class EditBlog extends React.Component<EditBlogProps, EditBlogState> {
             description,
             heading,
             timeToRead,
-            content: draftToHtml(convertToRaw(editorState.getCurrentContent()))
+            content: convertToRaw(editorState.getCurrentContent())
           }
         )
         await this.setState({
