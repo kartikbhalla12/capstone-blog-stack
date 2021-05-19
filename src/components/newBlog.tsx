@@ -2,7 +2,7 @@ import * as React from 'react'
 import Auth from './../auth/Auth'
 import { Container, Form, Button, Header, Message } from 'semantic-ui-react'
 import { Editor } from 'react-draft-wysiwyg'
-import { ContentState, RawDraftContentState } from 'draft-js'
+import { RawDraftContentState } from 'draft-js'
 import draftToHtml from 'draftjs-to-html'
 import { createBlog } from '../api/blogs'
 

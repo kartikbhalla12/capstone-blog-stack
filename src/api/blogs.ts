@@ -54,13 +54,13 @@ export async function getMyBlog(
     }
   })
   console.log('Blog:', response.data)
-  return response.data.item
+  return response.data.item as Blog
 }
 
 export async function deleteMyBlog(
   idToken: string,
   blogId: string
-): Promise<BlogListView[]> {
+): Promise<BlogListView> {
   console.log('Deleting a blog with id: ', blogId)
 
   const response = await Axios.delete(`${apiEndpoint}/blogs/${blogId}`, {
@@ -70,14 +70,14 @@ export async function deleteMyBlog(
     }
   })
   console.log('Deleted Blog:', response.data)
-  return response.data.items
+  return response.data.item as BlogListView
 }
 
 export async function createBlog(
   idToken: string,
   blog: BlogRequest,
   image: File
-): Promise<BlogListView[]> {
+): Promise<BlogListView> {
   console.log('Creating a new blog!', blog)
 
   const response = await Axios.post(`${apiEndpoint}/blogs`, blog, {
@@ -89,8 +89,28 @@ export async function createBlog(
   console.log('Created Blog: ', response.data)
 
   const imageUploadUrl: string = response.data.item.blogImageUploadUrl
-
   await Axios.put(imageUploadUrl, image)
 
-  return response.data.items
+  return response.data.item as BlogListView
+}
+export async function updateBlog(
+  idToken: string,
+  blogId: string,
+  blogRequest: BlogRequest
+): Promise<BlogListView[]> {
+  console.log('Updating a blog with id:', blogId)
+
+  const response = await Axios.patch(
+    `${apiEndpoint}/blogs/${blogId}`,
+    blogRequest,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${idToken}`
+      }
+    }
+  )
+  console.log('Updated Blog: ', response.data)
+
+  return response.data.item
 }
