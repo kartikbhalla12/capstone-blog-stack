@@ -41,6 +41,21 @@ export async function getBlog(idToken: string, blogId: string): Promise<Blog> {
   console.log('Blog:', response.data)
   return response.data.item
 }
+export async function getMyBlog(
+  idToken: string,
+  blogId: string
+): Promise<Blog> {
+  console.log('Fetching my blog with id: ', blogId)
+
+  const response = await Axios.get(`${apiEndpoint}/blogs/${blogId}?self=true`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${idToken}`
+    }
+  })
+  console.log('Blog:', response.data)
+  return response.data.item
+}
 
 export async function deleteMyBlog(
   idToken: string,

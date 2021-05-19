@@ -13,7 +13,10 @@ const BlogItem: React.FC<BlogItemProps> = ({ blog, deleteBlog, myBlog }) => {
   const history = useHistory()
   return (
     <Item
-      onClick={() => history.push(`/blogs/${blog.blogId}`)}
+      onClick={() => {
+        if (myBlog) history.push(`/my-blogs/${blog.blogId}`)
+        else history.push(`/blogs/${blog.blogId}`)
+      }}
       style={{ cursor: 'pointer' }}
     >
       <Item.Image

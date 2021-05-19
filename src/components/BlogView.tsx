@@ -2,13 +2,21 @@ import * as React from 'react'
 import Auth from '../auth/Auth'
 import { History } from 'history'
 import { Blog } from '../types/Blog'
-import { getBlog } from '../api/blogs'
+import { deleteMyBlog, getBlog, getMyBlog } from '../api/blogs'
 import { RouteComponentProps } from 'react-router-dom'
-import { Header, Container, Grid, Loader, Item, Image } from 'semantic-ui-react'
+import {
+  Header,
+  Container,
+  Grid,
+  Loader,
+  Button,
+  Image
+} from 'semantic-ui-react'
 import ReactHtmlParser from 'react-html-parser'
 
 export interface BlogViewProps extends RouteComponentProps<{ blogId: string }> {
   auth: Auth
+  userBlog?: boolean
 }
 
 export interface BlogViewState {
@@ -24,8 +32,12 @@ class BlogView extends React.Component<BlogViewProps, BlogViewState> {
       match: { params }
     } = this.props
 
+    let blog: Blog
     try {
-      const blog = await getBlog(this.props.auth.getIdToken(), params.blogId)
+      if (this.props.userBlog)
+        blog = await getMyBlog(this.props.auth.getIdToken(), params.blogId)
+      else blog = await getBlog(this.props.auth.getIdToken(), params.blogId)
+
       this.setState({
         blog,
         loadingBlog: false
@@ -37,6 +49,15 @@ class BlogView extends React.Component<BlogViewProps, BlogViewState> {
 
   render() {
     return <Container> {this.renderBlog()}</Container>
+  }
+
+  async handleDeleteBlog(blogId: string) {
+    try {
+      await deleteMyBlog(this.props.auth.getIdToken(), blogId)
+      this.props.history.push('/my-blogs')
+    } catch (ex) {
+      alert(ex)
+    }
   }
 
   renderBlog() {
@@ -51,7 +72,7 @@ class BlogView extends React.Component<BlogViewProps, BlogViewState> {
     // const updatedTime = `${updatedAt.getHours()} : ${updatedAt.getMinutes()}`
 
     return (
-      <Container style={{ padding: '4rem 0' }}>
+      <Container style={{ marginTop: '4rem' }}>
         <Header size="huge">{blog?.heading}</Header>
         <Header
           size="medium"
@@ -66,6 +87,29 @@ class BlogView extends React.Component<BlogViewProps, BlogViewState> {
           <span style={{ padding: '0 0.5rem' }}>•</span>
           <span>Updated {updatedAt}</span>
         </div>
+
+        {this.props.userBlog && (
+          <div style={{ margin: '1rem 0' }}>
+            <Button
+              onClick={(event) => {
+                event.stopPropagation()
+                this.props.history.push(`/my-blogs/edit/${blog!.blogId}`)
+              }}
+            >
+              EDIT BLOG
+            </Button>
+
+            <Button
+              color="red"
+              onClick={async (event) => {
+                event.stopPropagation()
+                await this.handleDeleteBlog(blog!.blogId)
+              }}
+            >
+              DELETE BLOG
+            </Button>
+          </div>
+        )}
 
         <Image
           src={blog?.imageUrl}
