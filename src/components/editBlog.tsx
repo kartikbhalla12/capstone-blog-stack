@@ -18,7 +18,12 @@ import {
 } from 'semantic-ui-react'
 import Auth from '../auth/Auth'
 import { RouteComponentProps } from 'react-router-dom'
-import { getMyBlog, updateBlog } from '../api/blogs'
+import {
+  getMyBlog,
+  getUpdateImageUrl,
+  updateBlog,
+  updateBlogImage
+} from '../api/blogs'
 
 export interface EditBlogProps extends RouteComponentProps<{ blogId: string }> {
   auth: Auth
@@ -34,6 +39,7 @@ export interface EditBlogState {
   success: string
   loadingBlog: boolean
   loadingMessage: string
+  updateImageUrl?: string
 }
 
 class EditBlog extends React.Component<EditBlogProps, EditBlogState> {
@@ -55,17 +61,23 @@ class EditBlog extends React.Component<EditBlogProps, EditBlogState> {
 
     try {
       const blog = await getMyBlog(this.props.auth.getIdToken(), params.blogId)
+      const updateImageUrl = await getUpdateImageUrl(
+        this.props.auth.getIdToken(),
+        params.blogId
+      )
 
       const contentState = convertFromRaw(blog.content)
       const editorState = EditorState.createWithContent(contentState)
 
       this.setState({
+        ...this.state,
         heading: blog.heading,
         authorName: blog.authorName,
         description: blog.description,
         timeToRead: blog.timeToRead,
         editorState,
-        loadingBlog: false
+        loadingBlog: false,
+        updateImageUrl
       })
     } catch (e) {
       alert(`Failed to fetch blog: ${e.message}`)
@@ -97,8 +109,9 @@ class EditBlog extends React.Component<EditBlogProps, EditBlogState> {
       description,
       heading,
       timeToRead,
-      editorState
-      // imageFile
+      editorState,
+      imageFile,
+      updateImageUrl
     } = this.state
 
     if (
@@ -107,7 +120,6 @@ class EditBlog extends React.Component<EditBlogProps, EditBlogState> {
       !heading ||
       !timeToRead ||
       !editorState
-      // !imageFile
     ) {
       this.setState({ ...this.state, error: 'All fields are required' })
     } else {
@@ -127,6 +139,9 @@ class EditBlog extends React.Component<EditBlogProps, EditBlogState> {
             content: convertToRaw(editorState.getCurrentContent())
           }
         )
+
+        if (imageFile) await updateBlogImage(updateImageUrl!, imageFile)
+
         await this.setState({
           error: '',
           success: 'Updated blog successfully!',

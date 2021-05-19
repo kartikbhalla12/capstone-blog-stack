@@ -89,7 +89,7 @@ export async function createBlog(
   console.log('Created Blog: ', response.data)
 
   const imageUploadUrl: string = response.data.item.blogImageUploadUrl
-  await Axios.put(imageUploadUrl, image)
+  await updateBlogImage(imageUploadUrl, image)
 
   return response.data.item as BlogListView
 }
@@ -113,4 +113,28 @@ export async function updateBlog(
   console.log('Updated Blog: ', response.data)
 
   return response.data.item
+}
+
+export async function getUpdateImageUrl(
+  idToken: string,
+  blogId: string
+): Promise<string> {
+  console.log('Getting update image url for blogId: ', blogId)
+
+  const response = await Axios.get(
+    `${apiEndpoint}/blogs/updateImageUrl/${blogId}`,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${idToken}`
+      }
+    }
+  )
+  console.log('image url: ', response.data)
+
+  return response.data.url as string
+}
+
+export async function updateBlogImage(imageUploadUrl: string, image: File) {
+  await Axios.put(imageUploadUrl, image)
 }

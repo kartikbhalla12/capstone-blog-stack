@@ -21,7 +21,7 @@ const BlogItem: React.FC<BlogItemProps> = ({ blog, deleteBlog, myBlog }) => {
     >
       <Item.Image
         size="small"
-        src={blog.imageUrl}
+        src={`${blog.imageUrl}?${Date.now()}`}
         rounded
         className="blog-image"
       />
