@@ -38,7 +38,7 @@ const BlogItem: React.FC<BlogItemProps> = ({ blog, deleteBlog, myBlog }) => {
         <Item.Extra style={{ display: 'flex' }}>
           <div>By {blog.authorName}</div>
           <div> • </div>
-          <div>{blog.timeToRead}</div>
+          <div>{blog.timeToRead} min</div>
         </Item.Extra>
         <Item.Extra style={{ display: 'flex' }}>
           {myBlog && (

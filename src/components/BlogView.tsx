@@ -84,7 +84,7 @@ class BlogView extends React.Component<BlogViewProps, BlogViewState> {
         <div style={{ display: 'flex', flexWrap: 'wrap', margin: '1rem 0' }}>
           <span>By {blog?.authorName}</span>
           <span style={{ padding: '0 0.5rem' }}>•</span>
-          <span>{blog?.timeToRead} read</span>
+          <span>{blog?.timeToRead} min read</span>
           <span style={{ padding: '0 0.5rem' }}>•</span>
           <span>Updated {updatedAt}</span>
         </div>

@@ -1,5 +1,5 @@
 // TODO: Once your application is deployed, copy an API id here so that the frontend could interact with it
-export const apiEndpoint = `blog-api.kartikbhalla.dev`
+export const apiEndpoint = `https://blog-api.kartikbhalla.dev`
 // export const apiEndpoint = `localhost:3000/dev`
 
 export const authConfig = {

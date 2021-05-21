@@ -33,7 +33,7 @@ export interface EditBlogState {
   heading: string
   description: string
   authorName: string
-  timeToRead: string
+  timeToRead: number
   imageFile?: File
   error: string
   success: string
@@ -47,7 +47,7 @@ class EditBlog extends React.Component<EditBlogProps, EditBlogState> {
     heading: '',
     description: '',
     authorName: '',
-    timeToRead: '',
+    timeToRead: NaN,
     error: '',
     success: '',
     loadingBlog: true,
@@ -125,6 +125,7 @@ class EditBlog extends React.Component<EditBlogProps, EditBlogState> {
     } else {
       try {
         this.setState({
+          ...this.state,
           loadingBlog: true,
           loadingMessage: 'Updating Blog!'
         })
@@ -143,6 +144,7 @@ class EditBlog extends React.Component<EditBlogProps, EditBlogState> {
         if (imageFile) await updateBlogImage(updateImageUrl!, imageFile)
 
         await this.setState({
+          ...this.state,
           error: '',
           success: 'Updated blog successfully!',
           editorState: undefined,
@@ -209,8 +211,9 @@ class EditBlog extends React.Component<EditBlogProps, EditBlogState> {
               />
             </Form.Field>
             <Form.Field required>
-              <label>Time To Read</label>
+              <label>Time To Read (in minutes)</label>
               <input
+                type="number"
                 value={this.state.timeToRead}
                 name="timeToRead"
                 placeholder=""

@@ -6,7 +6,7 @@ export interface BlogListView {
   heading: string
   description: string
   imageUrl: string
-  timeToRead: string
+  timeToRead: number
 }
 
 export interface Blog {
@@ -19,5 +19,5 @@ export interface Blog {
   updatedAt: string
   imageUrl: string
   content: RawDraftContentState
-  timeToRead: string
+  timeToRead: number
 }

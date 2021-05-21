@@ -24,7 +24,7 @@ export interface NewBlogState {
   heading: string
   description: string
   authorName: string
-  timeToRead: string
+  timeToRead?: number
   imageFile?: File
   error: string
   success: string
@@ -36,7 +36,7 @@ class NewBlog extends React.Component<NewBlogProps, NewBlogState> {
     heading: '',
     description: '',
     authorName: '',
-    timeToRead: '',
+    timeToRead: undefined,
     error: '',
     success: '',
     loading: false
@@ -95,10 +95,11 @@ class NewBlog extends React.Component<NewBlogProps, NewBlogState> {
           imageFile
         )
         await this.setState({
+          ...this.state,
           heading: '',
           description: '',
           authorName: '',
-          timeToRead: '',
+          timeToRead: undefined,
           error: '',
           success: 'Created blog successfully!',
           editorState: undefined,
@@ -108,6 +109,7 @@ class NewBlog extends React.Component<NewBlogProps, NewBlogState> {
         this.props.history.push('/my-blogs')
       } catch (ex) {
         this.setState({
+          ...this.state,
           error: 'Network Error!',
           success: ''
         })
@@ -164,8 +166,9 @@ class NewBlog extends React.Component<NewBlogProps, NewBlogState> {
               />
             </Form.Field>
             <Form.Field required>
-              <label>Time To Read</label>
+              <label>Time To Read (in minutes)</label>
               <input
+                type="number"
                 value={this.state.timeToRead}
                 name="timeToRead"
                 placeholder=""

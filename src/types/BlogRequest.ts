@@ -3,6 +3,6 @@ export interface BlogRequest {
   heading: string
   description: string
   content: RawDraftContentState
-  timeToRead: string
+  timeToRead: number
   authorName: string
 }
