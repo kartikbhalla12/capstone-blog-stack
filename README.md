@@ -1,5 +1,8 @@
 # capstone-blog-stack
 
+* Frontend URL: https://blog.kartikbhalla.dev
+* Backend API: https://blog-api.kartikbhalla.dev
+
 # Blog Backend
 
 ## General guidelines for RESTFUL URLs
