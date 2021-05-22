@@ -33,7 +33,7 @@ export interface EditBlogState {
   heading: string
   description: string
   authorName: string
-  timeToRead: number
+  timeToRead?: number
   imageFile?: File
   error: string
   success: string
@@ -47,7 +47,7 @@ class EditBlog extends React.Component<EditBlogProps, EditBlogState> {
     heading: '',
     description: '',
     authorName: '',
-    timeToRead: NaN,
+    timeToRead: undefined,
     error: '',
     success: '',
     loadingBlog: true,
@@ -88,11 +88,15 @@ class EditBlog extends React.Component<EditBlogProps, EditBlogState> {
     event:
       | React.ChangeEvent<HTMLInputElement>
       | React.FormEvent<HTMLTextAreaElement>
-  ) =>
+  ) => {
+    let value: string | number = event.currentTarget.value
+    if (event.currentTarget.type === 'number') value = parseInt(value)
+
     this.setState({
       ...this.state,
-      [event.currentTarget.name]: event.currentTarget.value
+      [event.currentTarget.name]: value
     })
+  }
 
   handleFileChange = (image: File) =>
     this.setState({ ...this.state, imageFile: image })

@@ -115,7 +115,6 @@ class BlogView extends React.Component<BlogViewProps, BlogViewState> {
         <Image
           src={blog?.imageUrl}
           size="large"
-          fluid
           centered
           className="blog-view-image"
           style={{

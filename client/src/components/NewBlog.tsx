@@ -46,12 +46,15 @@ class NewBlog extends React.Component<NewBlogProps, NewBlogState> {
     event:
       | React.ChangeEvent<HTMLInputElement>
       | React.FormEvent<HTMLTextAreaElement>
-  ) =>
+  ) => {
+    let value: string | number = event.currentTarget.value
+    if (event.currentTarget.type === 'number') value = parseInt(value)
+
     this.setState({
       ...this.state,
-      [event.currentTarget.name]: event.currentTarget.value
+      [event.currentTarget.name]: value
     })
-
+  }
   handleFileChange = (image: File) =>
     this.setState({ ...this.state, imageFile: image })
 
